@@ -1,38 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
-const TaskModal = ({ newTask, setNewTask, addTask, onClose }) => {
+const TaskModal = ({ task = {}, setTask, onSave, onClose }) => {
+  const [title, setTitle] = useState(task.title || "");
+  const [description, setDescription] = useState(task.description || "");
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">New Task</h2>
-        <input
-          type="text"
-          placeholder="Task Name"
-          value={newTask.title}
-          onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-          className="w-full p-2 border rounded mb-2"
-        />
-        <textarea
-          placeholder="Description"
-          value={newTask.description}
-          onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-          className="w-full p-2 border rounded mb-2"
-        />
-        <select
-          value={newTask.column}
-          onChange={(e) => setNewTask({ ...newTask, column: e.target.value })}
-          className="w-full p-2 border rounded mb-2"
-        >
-          <option value="todo">To Do</option>
-          <option value="inProgress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>
-        <div className="flex justify-between mt-4">
-          <button onClick={onClose} className="bg-gray-400 text-white p-2 rounded">
-            Cancel
-          </button>
-          <button onClick={addTask} className="bg-blue-500 text-white p-2 rounded">
-            Add Task
+        <h2 className="text-xl font-bold mb-4">{task.id ? "Edit Task" : "New Task"}</h2>
+        <input className="w-full p-2 border rounded mb-2" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <textarea className="w-full p-2 border rounded mb-2" value={description} onChange={(e) => setDescription(e.target.value)} />
+        <div className="flex justify-between">
+          {task.id && <button className="bg-red-500 text-white p-2 rounded" onClick={() => onSave(null)}>Delete</button>}
+          <button className="bg-blue-500 text-white p-2 rounded" onClick={() => onSave({ ...task, title, description })}>
+            Save
           </button>
         </div>
       </div>
